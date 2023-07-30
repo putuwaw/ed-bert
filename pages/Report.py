@@ -6,7 +6,7 @@ st.header("Report")
 st.write("Report the missed classification here")
 
 text = st.text_area("Text")
-emotions = ["Joy", "Sadness", "Anger", "Fear", "Love", "Surprise"]
+emotions = ['anger', 'fear', 'joy', 'love', 'sadness', 'surprise']
 
 predicted = st.selectbox("Predicted", emotions)
 actual_emotions = [x for x in emotions if x != predicted]
@@ -14,7 +14,8 @@ actual_emotions = [x for x in emotions if x != predicted]
 actual = st.selectbox("Actual", actual_emotions)
 if st.button("Report"):
     with st.spinner('Reporting...'):
-        data = {'text': text, 'predicted': predicted, 'actual': actual}
+        data = {'text': str.lower(text), 'predicted': str.lower(
+            predicted), 'actual': str.lower(actual)}
 
         connection = get_connection()
 
@@ -22,5 +23,5 @@ if st.button("Report"):
         connection.execute(insert_query)
         connection.commit()
         connection.close()
-    st.success("Reported")
+    st.success("Successfully reported!")
     st.balloons()

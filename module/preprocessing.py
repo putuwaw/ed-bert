@@ -19,16 +19,21 @@ def preprocess(text):
 @st.cache_data
 def get_report_data():
     conn = st.experimental_connection('mysql', type='sql')
-    df = conn.query('SELECT * from report;', ttl=0)
+    df = conn.query('SELECT * from report;', ttl=3600)
     df.drop(['id', 'predicted'], axis=1, inplace=True)
+    df.rename(columns={'actual': 'sentiment'}, inplace=True)
     return df
 
 
 @st.cache_data
 def get_raw_data():
-    train = pd.read_csv("train.txt", names=[
-                        'Input', 'Sentiment'], sep=';', encoding='utf-8')
-    return train
+    train = pd.read_csv("data/train.txt", names=[
+        'text', 'sentiment'], sep=';', encoding='utf-8')
+    val = pd.read_csv("data/val.txt", names=[
+        'text', 'sentiment'], sep=';', encoding='utf-8')
+    test = pd.read_csv("data/test.txt", names=[
+        'text', 'sentiment'], sep=';', encoding='utf-8')
+    return pd.concat([train, val, test], axis=0)
 
 
 @st.cache_data
@@ -43,5 +48,5 @@ def get_clean_data(df):
     df['text'] = df['text'].apply(preprocess)
     label_to_id = {'anger': 0, 'fear': 1, 'joy': 2,
                    'love': 3, 'sadness': 4, 'surprise': 5}
-    df['Sentiment'] = df['Sentiment'].map(label_to_id)
+    df['sentiment'] = df['sentiment'].map(label_to_id)
     return df

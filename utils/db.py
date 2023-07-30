@@ -10,15 +10,15 @@ def get_connection():
 
 
 def get_url() -> str:
-    db_username = st.secrets["db_username"]
-    db_password = st.secrets["db_password"]
-    db_host = st.secrets["db_host"]
-    db_port = st.secrets["db_port"]
-    db_name = st.secrets["db_name"]
-    return f"mysql://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}"
+    username = st.secrets["connections"]["mysql"]["username"]
+    password = st.secrets["connections"]["mysql"]["password"]
+    host = st.secrets["connections"]["mysql"]["host"]
+    port = st.secrets["connections"]["mysql"]["port"]
+    name = st.secrets["connections"]["mysql"]["database"]
+    return f"mysql+pymysql://{username}:{password}@{host}:{port}/{name}"
 
 
 def get_dataframe():
     conn = st.experimental_connection('mysql', type='sql')
-    df = conn.query('SELECT * from report;', ttl=0)
+    df = conn.query('SELECT * from report;', ttl=3600)
     return df

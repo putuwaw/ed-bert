@@ -15,14 +15,14 @@ import numpy as np
 def create_model():
     df = preprocessing.get_all_data()
     train_data, test_data = train_test_split(
-        df, test_size=0.3, random_state=42, shuffle=True, stratify=df.Sentiment)
+        df, test_size=0.3, random_state=42, shuffle=True, stratify=df.sentiment)
 
     model_name = 'bert-base-uncased'
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     bert_model = TFBertModel.from_pretrained(model_name)
 
     max_len = 40
-    X_train = tokenizer(text=train_data.Input.tolist(),
+    X_train = tokenizer(text=train_data.text.tolist(),
                         add_special_tokens=True,
                         return_tensors='tf',
                         max_length=max_len,
@@ -33,7 +33,7 @@ def create_model():
                         verbose=True
                         )
 
-    X_test = tokenizer(text=test_data.Input.tolist(),
+    X_test = tokenizer(text=test_data.text.tolist(),
                        add_special_tokens=True,
                        return_tensors='tf',
                        max_length=max_len,
