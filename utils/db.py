@@ -1,5 +1,8 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy.orm import sessionmaker
+from models.report import report
 import streamlit as st
+import pandas as pd
 
 
 def get_connection():
@@ -19,6 +22,8 @@ def get_url() -> str:
 
 
 def get_dataframe():
-    conn = st.experimental_connection('mysql', type='sql')
-    df = conn.query('SELECT * from report;', ttl=3600)
-    return df
+    engine = create_engine(get_url())
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    result = session.query(report).all()
+    return pd.DataFrame(result)

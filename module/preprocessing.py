@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import re
 import string
+from utils.db import get_dataframe
 
 
 @st.cache_data
@@ -18,8 +19,7 @@ def preprocess(text):
 
 @st.cache_data
 def get_report_data():
-    conn = st.experimental_connection('mysql', type='sql')
-    df = conn.query('SELECT * from report;', ttl=3600)
+    df = get_dataframe()
     df.drop(['id', 'predicted'], axis=1, inplace=True)
     df.rename(columns={'actual': 'sentiment'}, inplace=True)
     return df
