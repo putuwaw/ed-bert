@@ -20,7 +20,7 @@ google-auth-oauthlib==1.0.0
 google-pasta==0.2.0
 greenlet==2.0.2
 grpcio==1.54.0
-h5py==3.8.0
+h5py==3.9.0
 huggingface-hub==0.14.1
 idna==3.4
 importlib-metadata==6.6.0
