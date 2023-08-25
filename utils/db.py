@@ -7,6 +7,9 @@ import pandas as pd
 
 def get_connection():
     url = get_url()
+    if len(url) < 30:
+        url = "mysql+pymysql://root:root@db:3306/ed_bert"
+    print(url)
     engine = create_engine(url)
     connection = engine.connect()
     return connection
